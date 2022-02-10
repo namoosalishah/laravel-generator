@@ -4,6 +4,7 @@ namespace InfyOm\Generator\Common;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
+use InfyOm\Generator\Common\Arr;
 
 abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepository
 {
@@ -54,7 +55,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                 $methodClass = get_class($model->$key($key));
                 switch ($methodClass) {
                     case 'Illuminate\Database\Eloquent\Relations\BelongsToMany':
-                        $new_values = array_get($attributes, $key, []);
+                        $new_values = Arr::get($attributes, $key, []);
                         if (array_search('', $new_values) !== false) {
                             unset($new_values[array_search('', $new_values)]);
                         }
@@ -71,7 +72,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\BelongsTo':
                         $model_key = $model->$key()->getQualifiedForeignKey();
-                        $new_value = array_get($attributes, $key, null);
+                        $new_value = Arr::get($attributes, $key, null);
                         $new_value = $new_value == '' ? null : $new_value;
                         $model->$model_key = $new_value;
                         break;
@@ -80,7 +81,7 @@ abstract class BaseRepository extends \Prettus\Repository\Eloquent\BaseRepositor
                     case 'Illuminate\Database\Eloquent\Relations\HasOneOrMany':
                         break;
                     case 'Illuminate\Database\Eloquent\Relations\HasMany':
-                        $new_values = array_get($attributes, $key, []);
+                        $new_values = Arr::get($attributes, $key, []);
                         if (array_search('', $new_values) !== false) {
                             unset($new_values[array_search('', $new_values)]);
                         }
